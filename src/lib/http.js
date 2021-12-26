@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-11-17 23:00:58
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-26 16:43:58
+ * @LastEditTime: 2021-12-26 16:47:18
  * @FilePath: /excel/src/lib/http.js
  * @Description: Coding something
  */
@@ -10,7 +10,7 @@ import axios from 'axios';
 import {toast, loading, notify} from './utils';
 import {getToken} from './store/biz/login';
 import {TOAST_TYPE} from './constant';
-import router from '../router/index';
+// import router from '../router/index';
 import {refreshOrderList} from './store/biz/table';
 
 const host = 'localhost:8080';
@@ -59,9 +59,9 @@ export async function http ({
         notify(httpData.errorCode, httpData.data, TOAST_TYPE.ERROR);
     } else {
         toast(`${httpData.data}(${httpData.errorCode})`, TOAST_TYPE.ERROR);
-        if (httpData.data.indexOf('用户未登录') !== -1) {
-            setTimeout(() => {router.push({name: 'login'});}, 1000);
-        }
+        // if (httpData.data.indexOf('用户未登录') !== -1) {
+        //     setTimeout(() => {router.push({name: 'login'});}, 1000);
+        // }
     }
     return null;
 }

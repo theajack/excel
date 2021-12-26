@@ -2,13 +2,15 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:51:04
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-16 00:40:35
- * @FilePath: /admin/src/pages/components/order-table.vue
+ * @LastEditTime: 2021-12-26 21:17:43
+ * @FilePath: /excel/src/pages/components/order-table.vue
  * @Description: Coding something
 -->
 <template>
     <div>
+        <el-empty v-if='table.list.length === 0' description="暂无数据，请先导入数据"></el-empty>
         <el-table
+            v-else
             class='order-table'
             :data="table.list"
             border
@@ -23,15 +25,14 @@
                 width="55">
             </el-table-column>
             <el-table-column
-                width="120"
-                v-for='item in HEADER_LIST'
+                v-for='item in table.header'
                 sortable='custom'
-                :key="item.key"
-                :prop="item.key"
-                :label="item.value">
+                :key="item"
+                :prop="item"
+                :label="item">
                 <template slot-scope="scope">
-                    <span :attr-value='item.value' @click="clickTableCell" @mouseenter="hoverTableCell">
-                        <span>{{convertSingleKeyForReading(scope.row, item.key)}}</span>
+                    <span :attr-value='item' @click="clickTableCell" @mouseenter="hoverTableCell">
+                        <span>{{scope.row[item]}}</span>
                     </span>
                 </template>
             </el-table-column>
@@ -51,31 +52,25 @@
 
 <script>
 import OrderPagination from './order-pagination';
-import {EnumKeys, HEADER_NAME} from '../../lib/common/biz-define';
-import {setSelectItems, refreshOrderList} from '../../lib/store/biz/table';
-import {tableData, orderData} from '../../lib/store/store';
-import {editOrder} from '../../lib/store/biz/order';
-import {initOrderList} from '../../lib/store/biz/table';
+// import {refreshTableList, initOriginData} from '../../lib/biz/excel';
+import {setSelectItems} from '../../lib/biz/table';
+import {tableData} from '../../lib/store/store';
 import {notify} from '../../lib/utils';
 import {NOTIFY_TYPE} from '../../lib/constant';
-import {convertSingleKeyForReading} from '../../lib/common/biz-util';
-import {canUserReadInfo, getOrderColumeList} from '../../lib/order-item-rights';
 
 let notifyInstance = null;
-const countMaxHeight = () => (window.innerHeight - (70 + 41 + 54));
+const countMaxHeight = () => (window.innerHeight - (70 + 43));
 export default {
     name: 'order-table',
     components: {OrderPagination},
     data () {
         return {
-            HEADER_LIST: getOrderColumeList(),
+            HEADER_LIST: [],
             table: tableData,
-            EnumKeys,
             maxHeight: countMaxHeight(),
         };
     },
     mounted () {
-        initOrderList();
         this.initTableMaxHeight();
         window.addEventListener('resize', () => {this.initTableMaxHeight();}, true);
     },
@@ -83,24 +78,20 @@ export default {
         initTableMaxHeight () {
             this.maxHeight = countMaxHeight();
         },
-        convertSingleKeyForReading,
         handleSelectionChange (val) {
             setSelectItems(val);
-        },
-        onEditItem (order) {
-            editOrder(order);
         },
         sortChange (e) {
             // ascending descending null
             const {property, order} = e.column;
-
-            if (order === null) {
-                orderData.attr = '';
-            } else {
-                orderData.attr = property;
-                orderData.isDesc = order === 'descending';
-            }
-            refreshOrderList();
+            console.log(property, order);
+            // if (order === null) {
+            //     orderData.attr = '';
+            // } else {
+            //     orderData.attr = property;
+            //     orderData.isDesc = order === 'descending';
+            // }
+            // refreshOrderList();
         },
         clickTableCell (e) {
             const el = e.srcElement;
@@ -119,14 +110,15 @@ export default {
             }
         },
         onViewItem (order) {
-            let str = '';
-            if (notifyInstance) notifyInstance.close();
-            for (const k in order) {
-                if (HEADER_NAME[k] && canUserReadInfo(k)) {
-                    str += `${HEADER_NAME[k]}: ${this.convertSingleKeyForReading(order, k)}<br>`;
-                }
-            }
-            notifyInstance = notify('订单详情', str, NOTIFY_TYPE.INFO, 0, true);
+            console.log(order);
+            // let str = '';
+            // if (notifyInstance) notifyInstance.close();
+            // for (const k in order) {
+            //     if (HEADER_NAME[k] && canUserReadInfo(k)) {
+            //         str += `${HEADER_NAME[k]}: ${this.convertSingleKeyForReading(order, k)}<br>`;
+            //     }
+            // }
+            // notifyInstance = notify('订单详情', str, NOTIFY_TYPE.INFO, 0, true);
         }
     }
 };

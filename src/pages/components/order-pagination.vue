@@ -2,8 +2,8 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:51:04
  * @LastEditors: tackchen
- * @LastEditTime: 2021-11-20 09:41:24
- * @FilePath: /admin/src/pages/components/order-pagination.vue
+ * @LastEditTime: 2021-12-26 17:34:18
+ * @FilePath: /excel/src/pages/components/order-pagination.vue
  * @Description: Coding something
 -->
 <template>
@@ -22,7 +22,7 @@
 
 <script>
 import {page} from '../../lib/store/store';
-import {changeTablePage, changeTableSize} from '../../lib/store/biz/table';
+import {changeTablePage, changeTableSize} from '../../lib/biz/excel';
 export default {
     name: 'order-pagination',
     data () {

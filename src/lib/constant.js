@@ -20,12 +20,3 @@ export const EVENT = {
     OPEN_RESET_PWD: 1,
     ADD_ORDER: 2,
 };
-
-export const TAB_NAME = {
-    ALL: 'all',
-    DELIVER: 'deliver',
-    OVERDUE: 'overdue',
-    // 以下为仓库管理员tab
-    NOT_DELIVERED: 'not_deliver',
-    DISPATCH: 'dispatch',
-};
