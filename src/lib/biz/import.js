@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-12-26 17:26:32
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-26 21:01:10
+ * @LastEditTime: 2021-12-27 08:39:01
  * @FilePath: /excel/src/lib/biz/import.js
  * @Description: Coding something
  */
@@ -62,7 +62,6 @@ export async function importExcels ({files, mainKey = '序号'}) { // todo 主�
 
 async function importSingleExcel (file, onResult) {
     const results = await readExcelFile(file);
-
     results.forEach(single => {
         onResult(single);
     });

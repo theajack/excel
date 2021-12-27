@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:51:04
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-26 21:17:43
+ * @LastEditTime: 2021-12-27 07:55:06
  * @FilePath: /excel/src/pages/components/order-table.vue
  * @Description: Coding something
 -->
@@ -41,7 +41,6 @@
                 width="120"
                 label="操作">
                 <template slot-scope="scope">
-                    <el-button type='text' icon="el-icon-edit" @click="onEditItem(scope.row)">编辑</el-button>
                     <el-button type='text' icon="el-icon-view" @click="onViewItem(scope.row)">查看</el-button>
                 </template>
             </el-table-column>
@@ -57,6 +56,7 @@ import {setSelectItems} from '../../lib/biz/table';
 import {tableData} from '../../lib/store/store';
 import {notify} from '../../lib/utils';
 import {NOTIFY_TYPE} from '../../lib/constant';
+import {setSortInfo, sortExcelData} from '../../lib/biz/excel';
 
 let notifyInstance = null;
 const countMaxHeight = () => (window.innerHeight - (70 + 43));
@@ -84,7 +84,8 @@ export default {
         sortChange (e) {
             // ascending descending null
             const {property, order} = e.column;
-            console.log(property, order);
+            setSortInfo(property, order);
+            sortExcelData();
             // if (order === null) {
             //     orderData.attr = '';
             // } else {
@@ -109,16 +110,13 @@ export default {
                 el.title = el.innerText;
             }
         },
-        onViewItem (order) {
-            console.log(order);
-            // let str = '';
-            // if (notifyInstance) notifyInstance.close();
-            // for (const k in order) {
-            //     if (HEADER_NAME[k] && canUserReadInfo(k)) {
-            //         str += `${HEADER_NAME[k]}: ${this.convertSingleKeyForReading(order, k)}<br>`;
-            //     }
-            // }
-            // notifyInstance = notify('订单详情', str, NOTIFY_TYPE.INFO, 0, true);
+        onViewItem (item) {
+            let str = '';
+            if (notifyInstance) notifyInstance.close();
+            for (const k in item) {
+                str += `${k}: ${item[k]}<br>`;
+            }
+            notifyInstance = notify('订单详情', str, NOTIFY_TYPE.INFO, 0, true);
         }
     }
 };

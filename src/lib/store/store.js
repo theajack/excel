@@ -2,11 +2,16 @@
  * @Author: tackchen
  * @Date: 2021-11-05 01:01:13
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-26 21:19:28
+ * @LastEditTime: 2021-12-27 09:10:51
  * @FilePath: /excel/src/lib/store/store.js
  * @Description: Coding something
  */
+export const btnBox = {
+    queryVisible: false,
+};
 
+export const query = {};
+window.query = query;
 export const excelNames = {
     list: []
 };

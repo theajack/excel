@@ -2,8 +2,8 @@
  * @Author: tackchen
  * @Date: 2021-05-06 17:44:12
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-11 13:22:51
- * @FilePath: /admin/src/lib/utils.js
+ * @LastEditTime: 2021-12-27 09:05:11
+ * @FilePath: /excel/src/lib/utils.js
  * @Description: Coding something
  */
 import {Message, MessageBox, Loading, Notification} from 'element-ui';
@@ -131,4 +131,57 @@ export function setCookie (name, value, expires) {
 
 export function getCookie (name) {
     return Cookies.get(`${COOKIE_PREFIX}${name}`);
+}
+
+// 只进行一层的深拷贝
+export function simpleDeepClone (source) {
+    return source.map(item => Object.assign({}, item));
+}
+
+export function formatDateFromXlxs (serial) {
+    var utc_days = Math.floor(serial - 25569);
+    var utc_value = utc_days * 86400;
+    var date_info = new Date(utc_value * 1000);
+    var fractional_day = serial - Math.floor(serial) + 0.0000001;
+    var total_seconds = Math.floor(86400 * fractional_day);
+    var seconds = total_seconds % 60;
+    total_seconds -= seconds;
+    var hours = Math.floor(total_seconds / (60 * 60));
+    var minutes = Math.floor(total_seconds / 60) % 60;
+    var d = new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
+    return d.getTime();
+}
+export function timeToJson (time = Date.now()) {
+    const date = typeof time === 'number' ? new Date(time) : time;
+    if (!date) {return null;}
+    return {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        date: date.getDate(),
+        hour: date.getHours(),
+    };
+}
+
+// 获取明天早上0点的时间戳
+export function tomorrowZeroHourTime () {
+    const json = timeToJson(Date.now() + dayToMs());
+    return new Date(json.year, json.month - 1, json.date).getTime(); // todo
+}
+
+export function timeToDateStr (time = Date.now()) {
+    const date = timeToJson(time);
+    if (!date) {return '--';}
+    return `${date.year}-${fn(date.month)}-${fn(date.date)}`;
+}
+
+export function dayToMs (day = 1) {
+    return hourToMs(day * 24);
+}
+
+function fn (num) {
+    return num < 10 ? ('0' + num) : num.toString();
+}
+
+export function hourToMs (hour) {
+    return hour * 60 * 60 * 1000;
 }
