@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:51:04
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-27 07:55:06
+ * @LastEditTime: 2021-12-27 23:57:52
  * @FilePath: /excel/src/pages/components/order-table.vue
  * @Description: Coding something
 -->
@@ -32,7 +32,8 @@
                 :label="item">
                 <template slot-scope="scope">
                     <span :attr-value='item' @click="clickTableCell" @mouseenter="hoverTableCell">
-                        <span>{{scope.row[item]}}</span>
+                        <span v-if='DateKeys.includes(item)'>{{scope.row[item] | timeToDateTimeStr}}</span>
+                        <span v-else>{{scope.row[item]}}</span>
                     </span>
                 </template>
             </el-table-column>
@@ -54,9 +55,10 @@ import OrderPagination from './order-pagination';
 // import {refreshTableList, initOriginData} from '../../lib/biz/excel';
 import {setSelectItems} from '../../lib/biz/table';
 import {tableData} from '../../lib/store/store';
-import {notify} from '../../lib/utils';
+import {notify, timeToDateTimeStr} from '../../lib/utils';
 import {NOTIFY_TYPE} from '../../lib/constant';
 import {setSortInfo, sortExcelData} from '../../lib/biz/excel';
+import {DateKeys} from '../../lib/biz/filters';
 
 let notifyInstance = null;
 const countMaxHeight = () => (window.innerHeight - (70 + 43));
@@ -65,10 +67,16 @@ export default {
     components: {OrderPagination},
     data () {
         return {
+            DateKeys,
             HEADER_LIST: [],
             table: tableData,
             maxHeight: countMaxHeight(),
         };
+    },
+    filters: {
+        timeToDateTimeStr (v) {
+            return v ? timeToDateTimeStr(v) : '--';
+        }
     },
     mounted () {
         this.initTableMaxHeight();
@@ -114,7 +122,7 @@ export default {
             let str = '';
             if (notifyInstance) notifyInstance.close();
             for (const k in item) {
-                str += `${k}: ${item[k]}<br>`;
+                str += `${k}: ${DateKeys.includes(k) ? timeToDateTimeStr(item[k]) : item[k]}<br>`;
             }
             notifyInstance = notify('订单详情', str, NOTIFY_TYPE.INFO, 0, true);
         }

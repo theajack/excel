@@ -2,13 +2,17 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:51:04
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-27 08:13:41
+ * @LastEditTime: 2021-12-28 01:06:31
  * @FilePath: /excel/src/pages/components/btn-box.vue
  * @Description: Coding something
 -->
 <template>
     <div>
         <div class='header-buttons'>
+            <stat-btn/>
+            <el-button icon='el-icon-setting' size='mini' @click="dialogVisible.attrSet = true">
+                属性设置
+            </el-button>
             <el-button
                 plain
                 :type='page.isApplyFilter?"warning":"default"'
@@ -21,38 +25,36 @@
                 导入excel
                 <input @click.stop id='uploadBtn' type="file" multiple ref='uploadFile' @change="onInputFileChange">
             </el-button>
-            <!-- <el-button v-if="selectText" icon='el-icon-receiving' size='mini' @click="exportData">
+            <el-button v-if="selectText" icon='el-icon-document-checked' size='mini' @click="exportData">
                 导出已选{{selectText}}
             </el-button>
-            <el-button v-else-if="page.isApplyFilterResult" icon='el-icon-receiving' size='mini' @click="exportData">
+            <el-button v-else-if="page.isApplyFilterResult" icon='el-icon-tickets' size='mini' @click="exportData">
                 导出筛选结果
             </el-button>
             <el-button v-else icon='el-icon-receiving' size='mini' @click="exportData">
                 导出全部
-            </el-button> -->
+            </el-button>
         </div>
         <query-box :visible.sync='btnBox.queryVisible'/>
     </div>
 </template>
 
 <script>
-import {select, page, btnBox, tableData} from '../../lib/store/store';
+import {select, page, btnBox, tableData, dialogVisible} from '../../lib/store/store';
 import {loading, confirm, toast} from '../../lib/utils';
-import {readExcelFile} from '../../lib/excel'; // exportAsExcel
+import {readExcelFile} from '../../lib/excel';
 import {importExcels} from '../../lib/biz/import';
-import {initOriginData} from '../../lib/biz/excel';
+import {initOriginData, exportDataAsExcel} from '../../lib/biz/excel';
 import queryBox from './query.vue';
+import statBtn from './stat-btn.vue';
 import {TOAST_TYPE} from '../../lib/constant';
-// import {HEADER_NAME} from '../../lib/common/biz-define';
-// import {uploadOrders} from '../../lib/store/biz/order';
-// import {exportData} from '../../lib/store/biz/filters';
 
 export default {
     name: 'btn-box',
-    components: {queryBox},
+    components: {queryBox, statBtn},
     data () {
         return {
-            filename: '',
+            dialogVisible,
             page,
             btnBox,
             select: select,
@@ -103,15 +105,7 @@ export default {
                 closeLoading();
             }
         },
-        // exportAll () {
-        //     exportAsExcel(this.list, HEADER_NAME);
-        // },
-        // exportData () {
-        //     exportData();
-        // },
-        // exportFromDropMenu (command) {
-        //     exportData(command);
-        // },
+        exportData: exportDataAsExcel,
     }
 };
 </script>

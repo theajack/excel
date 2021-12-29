@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-11-05 01:01:13
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-27 09:10:51
+ * @LastEditTime: 2021-12-28 00:31:01
  * @FilePath: /excel/src/lib/store/store.js
  * @Description: Coding something
  */
@@ -34,4 +34,8 @@ export const page = {
     size: 50,
     index: 1,
     sizes: [2, 4, 20, 50, 100, 150, 200, 2000, 5000]
+};
+
+export const dialogVisible = {
+    attrSet: false,
 };

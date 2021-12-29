@@ -2,16 +2,18 @@
     <div class='list-mask'>
         <btn-box />
         <order-table />
+        <attr-set />
     </div>
 </template>
 
 <script>
 import BtnBox from './components/btn-box';
 import OrderTable from './components/order-table';
+import AttrSet from './components/attr-set';
 export default {
     name: 'list',
     components: {
-        BtnBox, OrderTable
+        BtnBox, OrderTable, AttrSet
     },
     mounted () {
         document.title = 'excel操作';

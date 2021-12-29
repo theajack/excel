@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-05-06 17:44:12
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-27 09:05:11
+ * @LastEditTime: 2021-12-28 15:37:28
  * @FilePath: /excel/src/lib/utils.js
  * @Description: Coding something
  */
@@ -139,16 +139,16 @@ export function simpleDeepClone (source) {
 }
 
 export function formatDateFromXlxs (serial) {
-    var utc_days = Math.floor(serial - 25569);
-    var utc_value = utc_days * 86400;
-    var date_info = new Date(utc_value * 1000);
-    var fractional_day = serial - Math.floor(serial) + 0.0000001;
-    var total_seconds = Math.floor(86400 * fractional_day);
-    var seconds = total_seconds % 60;
+    const utc_days = Math.floor(serial - 25569);
+    const utc_value = utc_days * 86400;
+    const date_info = new Date(utc_value * 1000);
+    const fractional_day = serial - Math.floor(serial) + 0.0000001;
+    let total_seconds = Math.floor(86400 * fractional_day);
+    const seconds = total_seconds % 60;
     total_seconds -= seconds;
-    var hours = Math.floor(total_seconds / (60 * 60));
-    var minutes = Math.floor(total_seconds / 60) % 60;
-    var d = new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
+    const hours = Math.floor(total_seconds / (60 * 60));
+    const minutes = Math.floor(total_seconds / 60) % 60;
+    const d = new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
     return d.getTime();
 }
 export function timeToJson (time = Date.now()) {
@@ -172,6 +172,12 @@ export function timeToDateStr (time = Date.now()) {
     const date = timeToJson(time);
     if (!date) {return '--';}
     return `${date.year}-${fn(date.month)}-${fn(date.date)}`;
+}
+
+export function timeToDateTimeStr (time = Date.now()) {
+    const date = new Date(time);
+    if (!date) {return '--';}
+    return `${date.getFullYear()}-${fn(date.getMonth() + 1)}-${fn(date.getDate())} ${fn(date.getHours())}:${fn(date.getMinutes())}:${fn(date.getSeconds())}`;
 }
 
 export function dayToMs (day = 1) {
