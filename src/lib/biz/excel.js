@@ -2,18 +2,18 @@
  * @Author: tackchen
  * @Date: 2021-12-26 17:24:30
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-28 00:27:47
+ * @LastEditTime: 2021-12-29 22:55:37
  * @FilePath: /excel/src/lib/biz/excel.js
  * @Description: Coding something
  */
 // import {exportAsExcel} from '../excel';
 import {exportAsExcel} from '../excel';
 import {tableData, page, select} from '../store/store';
-import {formatDateFromXlxs, simpleDeepClone, timeToDateTimeStr} from '../utils';
+import {formatDateFromXlxs, simpleDeepClone, timeStrToDateTime, timeToDateTimeStr} from '../utils';
 import {AgeKeys, DateKeys, getFilterSource, initFilterSource, NumberKeys, pureClearFilters} from './filters';
 
 let dataSource = []; // 最原始的数据 不能改变
-
+window.getDataSource = () => dataSource;
 let tableTotalData = [];
 
 const sortInfo = {
@@ -34,8 +34,11 @@ export function formatDataFromExcel (data) {
     return data.map(item => {
         for (const k in item) {
             if (DateKeys.includes(k)) {
-                if (typeof item[k] === 'number')
+                if (typeof item[k] === 'number') {
                     item[k] = formatDateFromXlxs(item[k]);
+                } else {
+                    item[k] = timeStrToDateTime(item[k]);
+                }
             } else if (NumberKeys.includes(k)) {
                 if (typeof item[k] !== 'number') {
                     const value = parseFloat(item[k]);

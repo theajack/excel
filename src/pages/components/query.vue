@@ -39,6 +39,7 @@ import {
 } from '../../lib/biz/filters';
 import queryWrapper from './query-wrapper.vue';
 import numberRange from './number-range.vue';
+import {loading} from '../../lib/utils';
 export default {
     name: 'order-item',
     props: ['visible'],
@@ -60,7 +61,9 @@ export default {
     },
     methods: {
         startFilter () {
+            const {closeLoading} = loading('查询中...');
             startQueryWithFilters();
+            closeLoading();
         },
         clearQueryFileds () {
             clearFilters();

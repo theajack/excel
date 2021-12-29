@@ -2,12 +2,12 @@
  * @Author: tackchen
  * @Date: 2021-11-05 00:17:25
  * @LastEditors: tackchen
- * @LastEditTime: 2021-11-20 15:43:00
- * @FilePath: /admin/src/lib/excel.js
+ * @LastEditTime: 2021-12-29 21:52:50
+ * @FilePath: /excel/src/lib/excel.js
  * @Description: Coding something
  */
 import XLSX from 'xlsx';
-
+window.XLSX = XLSX;
 export function readExcelFile (file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -15,6 +15,7 @@ export function readExcelFile (file) {
             const data = e.target.result;
             const workbook = XLSX.read(data, {type: 'array'});
             const sheetNames = workbook.SheetNames;
+            // debugger;
             resolve(sheetNames.map((sheetName) => {
                 const worksheet = workbook.Sheets[sheetName];
                 return {

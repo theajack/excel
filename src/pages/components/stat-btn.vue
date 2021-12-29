@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-12-28 01:03:25
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-28 01:07:43
+ * @LastEditTime: 2021-12-29 22:26:46
  * @FilePath: /excel/src/pages/components/stat-btn.vue
  * @Description: Coding something
 -->
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {timesStat} from '../../lib/biz/stat/times-stat';
 export default {
     name: 'stat-btn',
     data () {
@@ -27,7 +28,10 @@ export default {
     },
     methods: {
         stat (command) {
-            console.log(command);
+            // console.log(command);
+            if (command === 0) {
+                timesStat();
+            }
         },
     }
 };

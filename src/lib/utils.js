@@ -2,13 +2,15 @@
  * @Author: tackchen
  * @Date: 2021-05-06 17:44:12
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-28 15:37:28
+ * @LastEditTime: 2021-12-29 22:59:18
  * @FilePath: /excel/src/lib/utils.js
  * @Description: Coding something
  */
 import {Message, MessageBox, Loading, Notification} from 'element-ui';
 import {TOAST_TYPE} from './constant';
 import Cookies from 'js-cookie';
+
+export const DATE_SPLIT = '/';
 
 export function loading (text = '加载中...') {
     const instance = Loading.service({
@@ -171,13 +173,13 @@ export function tomorrowZeroHourTime () {
 export function timeToDateStr (time = Date.now()) {
     const date = timeToJson(time);
     if (!date) {return '--';}
-    return `${date.year}-${fn(date.month)}-${fn(date.date)}`;
+    return `${date.year}${DATE_SPLIT}${fn(date.month)}${DATE_SPLIT}${fn(date.date)}`;
 }
 
 export function timeToDateTimeStr (time = Date.now()) {
     const date = new Date(time);
     if (!date) {return '--';}
-    return `${date.getFullYear()}-${fn(date.getMonth() + 1)}-${fn(date.getDate())} ${fn(date.getHours())}:${fn(date.getMinutes())}:${fn(date.getSeconds())}`;
+    return `${date.getFullYear()}${DATE_SPLIT}${fn(date.getMonth() + 1)}${DATE_SPLIT}${fn(date.getDate())} ${fn(date.getHours())}:${fn(date.getMinutes())}:${fn(date.getSeconds())}`;
 }
 
 export function dayToMs (day = 1) {
@@ -190,4 +192,18 @@ function fn (num) {
 
 export function hourToMs (hour) {
     return hour * 60 * 60 * 1000;
+}
+
+export function timeStrToDateTime (str) {
+    const [dateStr, timeStr] = str.split(' ');
+    if (!dateStr) return '';
+    const [year, month, date] = dateStr.split(DATE_SPLIT);
+    const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(date));
+    if (timeStr) {
+        const [hour, minute, second] = timeStr.split(':');
+        dateObject.setHours(hour);
+        dateObject.setMinutes(minute);
+        dateObject.setSeconds(second);
+    }
+    return dateObject.getTime();
 }

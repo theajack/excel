@@ -2,7 +2,7 @@
  * @Author: tackchen
  * @Date: 2021-12-26 17:26:32
  * @LastEditors: tackchen
- * @LastEditTime: 2021-12-27 08:39:01
+ * @LastEditTime: 2021-12-29 22:27:21
  * @FilePath: /excel/src/lib/biz/import.js
  * @Description: Coding something
  */
@@ -11,16 +11,16 @@ import {readExcelFile} from '../excel';
 import {excelNames} from '../store/store';
 import {initOriginData} from './excel';
 
-export async function importExcels ({files, mainKey = '序号'}) { // todo 主键
+export async function importExcels ({files, mainKey = '入院号', subKey = '入院时间'}) { // todo 主键
     return new Promise((resolve) => {
-        console.log(files);
+        // console.log(files);
         const size = files.length;
         let index = 0;
 
         const excelData = {};
         const addIntoExcelData = (data) => {
             data.forEach(item => {
-                const mainKeyValue = item[mainKey];
+                const mainKeyValue = item[mainKey] + item[subKey];
                 if (excelData[mainKeyValue]) {
                     excelData[mainKeyValue] = Object.assign(excelData[mainKeyValue], item);
                 } else {
@@ -39,7 +39,7 @@ export async function importExcels ({files, mainKey = '序号'}) { // todo 主�
         };
 
         const onResult = (data) => {
-            console.log(data.data);
+            // console.log(data.data);
             addIntoExcelData(data.data);
             addIntoHeader(data.header);
             index ++;
@@ -62,6 +62,7 @@ export async function importExcels ({files, mainKey = '序号'}) { // todo 主�
 
 async function importSingleExcel (file, onResult) {
     const results = await readExcelFile(file);
+    // debugger;
     results.forEach(single => {
         onResult(single);
     });
